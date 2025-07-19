@@ -1,20 +1,26 @@
+// routes/bookRoutes.js
 import express from 'express';
 import {
-  getBooks,
-  createBook,
-  updateBook,
-  deleteBook
+    getBooks, getBookById, deleteAllBooks,
+    createBook, updateBook, deleteBook,
+    borrowBook, returnBook
 } from '../controllers/bookController.js';
-import auth from '../middleware/auth.js';
-import { borrowBook, returnBook } from '../controllers/bookController.js';
+import { protect, admin } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get('/', getBooks);          
-router.post('/', auth, createBook); 
-router.put('/:id', auth, updateBook); 
-router.delete('/:id', auth, deleteBook); 
-router.post('/:id/borrow', auth, borrowBook);
-router.post('/:id/return', auth, returnBook);
+// Everyone who¡¦s logged in can browse & borrow/return
+router.get('/', protect, getBooks);
+router.get('/:id', protect, getBookById);
+router.post('/:id/borrow', protect, borrowBook);
+router.post('/:id/return', protect, returnBook);
+
+// Only admins can manage inventory
+router.post('/', protect, admin, createBook);
+router.put('/:id', protect, admin, updateBook);
+router.delete('/:id', protect, admin, deleteBook);
+router.delete('/', protect, admin, deleteAllBooks);
 
 export default router;
+
+
