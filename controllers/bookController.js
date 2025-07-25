@@ -165,70 +165,86 @@ export const deleteBook = async (req, res) => {
 // @route   POST /api/books/:id/borrow
 // @access  Private
 export const borrowBook = async (req, res) => {
-    const { dueAt } = req.body;
-    try {
-        const book = await Book.findById(req.params.id);
-        if (!book) return res.status(404).json({ message: 'Book not found' });
-        if (book.borrowedBy) return res.status(400).json({ message: 'Book already borrowed' });
+  const userId = req.user._id.toString();
+  const bookId = req.params.id;
+  const { dueAt } = req.body;
 
-        const reservation = await Reservation.findOne({ book: book._id, status: 'pending' });
-        if (reservation && reservation.user.toString() !== req.user.id) {
-            return res.status(400).json({ message: 'Book reserved by another user' });
-        }
-        if (reservation && reservation.user.toString() === req.user.id) {
-            reservation.status = 'cancelled';
-            await reservation.save();
-        }
+  try {
+    // 1) Fetch the book
+    const book = await Book.findById(bookId);
+    if (!book) return res.status(404).json({ message: 'Book not found' });
 
-        const record = await BorrowRecord.create({ book: book._id, user: req.user.id, dueAt });
-        book.borrowedBy = req.user.id;
-        book.borrowedAt = new Date();
-        await book.save();
-
-        res.status(201).json({ book, record });
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+    // 2) Already borrowed?
+    if (book.borrowedBy) {
+      return res.status(400).json({ message: 'Book is already borrowed' });
     }
+
+    // 3) Reservation check
+    const reservation = await Reservation.findOne({ book: bookId });
+    if (reservation) {
+      // If reserved by someone else → forbidden
+      if (reservation.user.toString() !== userId) {
+        return res.status(403).json({ message: 'Book is reserved by another user' });
+      }
+      // If reserved by you → clear the reservation
+      await reservation.deleteOne();
+    }
+
+    // 4) Mark as borrowed
+    book.borrowedBy  = userId;
+    book.borrowedAt  = new Date();
+    await book.save();
+
+    // 5) Create & return a borrow record
+    const record = await BorrowRecord.create({
+      user: req.user._id,
+      book: bookId,
+      borrowedAt: new Date(),
+      dueAt: new Date(dueAt)
+    });
+    return res.json(record);
+
+  } catch (err) {
+    console.error('❌ borrowBook error:', err);
+    return res.status(500).json({ message: err.message });
+  }
 };
 
 // @desc    Return a book
 // @route   POST /api/books/:id/return
 // @access  Private
 export const returnBook = async (req, res) => {
-    try {
-        const book = await Book.findById(req.params.id);
-        if (!book) return res.status(404).json({ message: 'Book not found' });
-        if (!book.borrowedBy) return res.status(400).json({ message: 'Book is not currently borrowed' });
+  const userId = req.user._id;
+  const bookId = req.params.id;
 
-        // Find *active* borrow record
-        const record = await BorrowRecord.findOne({
-            book: book._id,
-            user: req.user._id,
-            status: 'borrowed'
-        });
-        if (!record) {
-            return res.status(404).json({ message: 'No active borrow record found for this user/book' });
-        }
-
-        // Mark it returned
-        record.returnedAt = new Date();
-        record.status = 'returned';
-        await record.save();
-
-        // Clear book’s borrowed fields
-        book.borrowedBy = null;
-        book.borrowedAt = null;
-        await book.save();
-
-        res.json({
-            message: 'Book returned successfully',
-            book,
-            record   // now includes returnedAt & status
-        });
-    } catch (err) {
-        console.error('❌ returnBook error:', err);
-        res.status(500).json({ message: err.message });
+  try {
+    // 1) Find an active borrow record for this user and book
+    const record = await BorrowRecord.findOne({
+      book: bookId,
+      user: userId,
+      returnedAt: null
+    });
+    if (!record) {
+      return res.status(404).json({ message: 'No active borrow record found for this book' });
     }
+
+    // 2) Mark returnedAt on the record
+    record.returnedAt = new Date();
+    await record.save();
+
+    // 3) Update the book status
+    const book = await Book.findById(bookId);
+    if (book) {
+      book.borrowedBy = null;
+      book.borrowedAt = null;
+      await book.save();
+    }
+
+    res.json({ message: 'Book returned successfully', record });
+  } catch (err) {
+    console.error('❌ returnBook error:', err);
+    res.status(500).json({ message: err.message });
+  }
 };
 
 

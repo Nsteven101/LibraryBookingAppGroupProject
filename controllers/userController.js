@@ -84,15 +84,18 @@ export const logout = (req, res) => {
 // @desc    Get logged-in user profile
 // @route   GET /api/users/profile
 // @access  Private
-export const getProfile = async (req, res) => {
-    try {
-        const u = await User.findById(req.user._id).select('-password');
-        if (!u) return res.status(404).json({ message: 'User not found' });
-        res.json(u);
-    } catch (err) {
-        console.error("❌ getProfile error:", err);
-        res.status(500).json({ message: err.message });
+export const getUserProfile = async (req, res) => {
+  try {
+    // req.user is set by your auth middleware after validating the JWT
+    const user = await User.findById(req.user._id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
+    res.json(user);
+  } catch (err) {
+    console.error('❌ getUserProfile error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
 // @desc    Update own user profile

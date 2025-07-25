@@ -1,22 +1,19 @@
-// routes/reservationRoutes.js
 import express from 'express';
+import { protect } from '../middleware/auth.js';
 import {
-    getReservations, getReservationById, deleteAllReservations,
-    createReservation, updateReservation, deleteReservation
+  createReservation,
+  getReservations,
+  deleteReservation,
+  deleteAllReservations
 } from '../controllers/reservationController.js';
-import { protect, admin } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Logged-in users can see their own reservations via a query; admins see all
-router.get('/', protect, admin, getReservations);
-router.get('/:id', protect, admin, getReservationById);
+router.use(protect);
 
-// Anyone logged-in can create or cancel their own reservation
-router.post('/', protect, createReservation);
-router.put('/:id', protect, admin, updateReservation);
-router.delete('/:id', protect, admin, deleteReservation);
-router.delete('/', protect, admin, deleteAllReservations);
+router.post('/', createReservation);
+router.get ('/', getReservations);          // now returns ALL holds
+router.delete('/:id', deleteReservation);
+router.delete('/',    deleteAllReservations);
 
 export default router;
-
