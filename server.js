@@ -43,14 +43,13 @@ app.get('/', (req, res) => {
 
 // Serve React client in production
 
-    app.use(
-        express.static(path.join(__dirname, 'bb-public-client', 'build'))
-    );
-    app.get('*', (req, res) => {
-        res.sendFile(
-            path.join(__dirname, 'bb-public-client', 'build', 'index.html')
-        );
-    });
+app.use(express.static(path.join(__dirname,'bb-public-client','build')));
+
+app.get('/*', (req, res) => {
+  res.sendFile(
+    path.join(__dirname, 'bb-public-client', 'build', 'index.html')
+  );
+});
 
 
 
