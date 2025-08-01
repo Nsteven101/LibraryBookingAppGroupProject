@@ -1,0 +1,3 @@
+# Visual Studio/VSCode caches
+.vs/
+node_modules/
