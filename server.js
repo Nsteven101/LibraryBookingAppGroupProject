@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 });*/
 
 // Serve React client in production
-if (process.env.NODE_ENV === 'production') {
+
     app.use(
         express.static(path.join(__dirname, 'bb-public-client', 'build'))
     );
@@ -51,7 +51,7 @@ if (process.env.NODE_ENV === 'production') {
             path.join(__dirname, 'bb-public-client', 'build', 'index.html')
         );
     });
-}
+
 
 
 // 404 handler - should be after all routes but before starting server
