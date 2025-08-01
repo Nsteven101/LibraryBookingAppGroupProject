@@ -36,10 +36,10 @@ app.use('/api/authors', authorRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/reviews', reviewRoutes);
 
-// Health check (public)
+/* Health check (public)
 app.get('/', (req, res) => {
     res.send('Borrowing Book App is running!');
-});
+});*/
 
 // Serve React client in production
 if (process.env.NODE_ENV === 'production') {
