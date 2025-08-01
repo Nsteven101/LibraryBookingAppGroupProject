@@ -1,0 +1,432 @@
+/* src/styles/index.css */
+
+:root {
+  --color-primary: #4a90e2;
+  --color-secondary: #50e3c2;
+  --color-bg: #f4f7fa;
+  --color-card: #ffffff;
+  --color-text: #333333;
+  --color-muted: #777777;
+  --radius: 8px;
+  --spacing: 1rem;
+  --transition: 0.3s ease;
+}
+
+/* Reset & Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover {
+  color: var(--color-secondary);
+}
+
+/* Layout */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing);
+}
+h1 {
+  margin-bottom: var(--spacing);
+  font-size: 2rem;
+  color: var(--color-primary);
+}
+
+/* Buttons */
+.btn,
+button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius);
+  border: none;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color var(--transition), transform var(--transition);
+}
+.btn:hover,
+button:hover {
+  background-color: var(--color-secondary);
+  transform: translateY(-2px);
+}
+.btn:disabled,
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: var(--spacing);
+}
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--color-muted);
+}
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: border-color var(--transition);
+}
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing);
+  background-color: var(--color-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+th, td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #eef0f3;
+}
+th {
+  background-color: var(--color-bg);
+  color: var(--color-muted);
+  font-weight: 600;
+}
+tbody tr:nth-child(even) {
+  background-color: #fafbfc;
+}
+tbody tr:hover {
+  background-color: #f0f1f4;
+}
+
+/* Cards & Grids */
+.card {
+  background-color: var(--color-card);
+  border-radius: var(--radius);
+  padding: var(--spacing);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform var(--transition);
+}
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--spacing);
+}
+
+.book-card {
+  background-color: var(--color-card);
+  padding: var(--spacing);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform var(--transition);
+}
+.book-card:hover {
+  transform: translateY(-4px);
+}
+
+.status-available {
+  color: green;
+  font-weight: 600;
+}
+.status-borrowed {
+  color: red;
+  font-weight: 600;
+}
+
+/* Borrowed Records Table */
+.borrowed-table th,
+.borrowed-table td {
+  padding: 0.6rem;
+}
+
+/* Navigation Bar */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-card);
+  padding: calc(var(--spacing) / 2) var(--spacing);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header .logo a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+.header .nav-links {
+  display: flex;
+  align-items: center;
+}
+.header .nav-links a,
+.header .nav-links button {
+  margin-left: var(--spacing);
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  transition: background-color var(--transition), color var(--transition);
+}
+.header .nav-links a:hover,
+.header .nav-links button:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+/* Admin Dashboard */
+.admin-dashboard {
+  padding: var(--spacing);
+}
+
+.admin-dashboard .dashboard-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: var(--spacing);
+  margin-bottom: var(--spacing);
+}
+
+.admin-dashboard .dashboard-links li a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius);
+  transition: background-color var(--transition);
+}
+.admin-dashboard .dashboard-links li a:hover {
+  background-color: var(--color-secondary);
+}
+
+.admin-dashboard .quick-actions {
+  display: flex;
+  gap: var(--spacing);
+  margin-bottom: var(--spacing);
+}
+.admin-dashboard .quick-actions .btn {
+  flex: 1;
+  text-align: center;
+}
+
+.admin-dashboard .dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing);
+}
+.admin-dashboard .dashboard-table th,
+.admin-dashboard .dashboard-table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid #eef0f3;
+}
+.admin-dashboard .dashboard-table tbody tr:hover {
+  background-color: #f0f1f4;
+}
+
+.admin-dashboard .search-input {
+  margin-bottom: var(--spacing);
+  max-width: 300px;
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: var(--radius);
+}
+
+.admin-dashboard .summary-box {
+  background-color: var(--color-secondary);
+  color: #fff;
+  padding: var(--spacing);
+  border-radius: var(--radius);
+  margin-top: var(--spacing);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: var(--spacing) 0;
+  color: var(--color-muted);
+}
+
+/* Action Link Buttons in Tables */
+table td a {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius);
+  background-color: var(--color-primary);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background-color var(--transition), transform var(--transition);
+  margin-right: 0.5rem;
+}
+table td a:hover {
+  background-color: var(--color-secondary);
+  transform: translateY(-2px);
+}
+
+.admin-dashboard {
+  padding: var(--spacing);
+}
+
+/* Title */
+.dashboard-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: calc(var(--spacing) * 1.5);
+  color: var(--color-primary);
+}
+
+/* Card Grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing);
+}
+
+/* Individual Cards */
+.dashboard-card {
+  background-color: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: var(--spacing);
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.dashboard-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+/* Icon */
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: calc(var(--spacing) / 2);
+}
+
+/* Card Title */
+.card-title {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  padding: var(--spacing);
+}
+
+.auth-card {
+  background-color: #ffffff;
+  padding: calc(var(--spacing) * 1.5);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-card h1 {
+  text-align: center;
+  margin-bottom: var(--spacing);
+  color: var(--color-primary);
+  font-size: 2rem;
+}
+
+.form-group {
+  margin-bottom: var(--spacing);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccd0d5;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: border-color var(--transition);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+/* Narrow the auth card */
+.auth-card {
+  max-width: 360px;      
+  margin: 0 auto;        
+}
+
+/* Ensure the page wrapper still centers nicely */
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing);
+  background-color: var(--color-bg);
+}
+
+/* Underline and color the switch link */
+.auth-switch a {
+  color: var(--color-primary);
+  text-decoration: underline;  /* make it look like a hyperlink */
+  cursor: pointer;
+}
+
+/* Optional: give the switch text a little more breathing room */
+.auth-switch {
+  margin-top: calc(var(--spacing) / 2);
+  font-size: 0.9rem;
+}
+
+.auth-logo {
+  display: block;
+  margin: 0 auto 1rem;
+  max-width: 200px;   /* adjust as needed */
+  height: auto;
+}
